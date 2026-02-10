@@ -29,9 +29,17 @@ async function seedData() {
     console.log("🌱 Seeding initial data...");
     // 1. Create Users
     const admin = await User.create({
+      name: 'Admin',
       email: 'admin@securesup.fr',
       password: 'admin_password', // Vulnerability: Plain text password
       role: 'ADMIN'
+    });
+
+    const student1 = await User.create({
+      name: 'Alice',
+      email: 'alice@test'
+      , password: 'alice_password',
+      role: 'USER'
     });
 
     // 2. Create Schools
@@ -59,7 +67,7 @@ async function seedData() {
       schoolId: sorbonne.id,
       rank: 2
     });
-    console.log("✨ Seed completed.");
+    console.log("Seed completed.");
 }
 
 startServer();

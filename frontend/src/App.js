@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
+import Dashboard from './components/Dashboard';
 
 function App() {
-  const [user, setUser] = useState(null); // Stocke les infos de l'utilisateur connecté
+  const [user, setUser] = useState(null);
   const [isRegistering, setIsRegistering] = useState(false);
 
   if (!user) {
@@ -16,25 +17,15 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #003366' }}>
+    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #003366', paddingBottom: '10px' }}>
         <h1>SecureSup</h1>
         <div>
-          <span>Welcome, <strong>{user.name}</strong> ({user.role})</span>
-          <button onClick={() => setUser(null)} style={{ marginLeft: '10px' }}>Déconnexion</button>
+          <span>Connected as <strong>{user.name}</strong></span>
+          <button onClick={() => setUser(null)} style={{ marginLeft: '15px' }}>Logout</button>
         </div>
       </header>
-
-      {user.role === 'ADMIN' ? (
-        <div style={{ marginTop: '20px', padding: '20px', background: '#ffe6e6' }}>
-          <h2>Administration Panel</h2>
-        </div>
-      ) : (
-        <div style={{ marginTop: '20px', padding: '20px', background: '#e6f3ff' }}>
-          <h2>Student Space</h2>
-          <p>Check your preferences and available training courses.</p>
-        </div>
-      )}
+      <Dashboard user={user} />
     </div>
   );
 }
