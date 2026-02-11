@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
-import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
+import UserDashboard from './components/UserDashboard';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,7 +26,11 @@ function App() {
           <button onClick={() => setUser(null)} style={{ marginLeft: '15px' }}>Logout</button>
         </div>
       </header>
-      <Dashboard user={user} />
+      {user.role === 'ADMIN' ? (
+        <AdminDashboard user={user} />
+      ) : (
+        <UserDashboard user={user} />
+      )}
     </div>
   );
 }
