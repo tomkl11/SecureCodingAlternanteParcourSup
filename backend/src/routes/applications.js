@@ -3,15 +3,6 @@ const router = express.Router();
 const School = require('../models/School');
 const Application = require('../models/Application');
 const User = require('../models/User');
-
-router.get('/applications', async (req, res) => {
-    try {
-        const allApplications = await Application.findAll();
-        res.json(allApplications);
-    } catch (err) {
-        res.status(500).json({ error: "Could not fetch applications" });
-    }
-});
 router.get('/application/users/:userId/:registered?', async (req, res) => {
     try {
         const {userId, registered} = req.params;
