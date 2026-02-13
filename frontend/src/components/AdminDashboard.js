@@ -147,7 +147,9 @@ const AdminDashboard = ({ user }) => {
           <tbody>
             {filteredUsers.map((u) => (
               <tr key={u.id}>
-                <td dangerouslySetInnerHTML={{ __html: u.name }}></td>
+                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  {u.name}
+                </td>
                 <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                   {u.email}
                 </td>

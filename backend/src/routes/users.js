@@ -43,13 +43,14 @@ router.post('/users/create', async (req, res) => {
 
 router.post('/users/:id/edit', async (req, res) => {
   try {
-      const { id } = req.params;
-      const { name, email} = req.body;
-      const userToEdit = await User.findByPk(id);
+    const { id } = req.params;
+    const { name, email} = req.body;
+    const cleanName = validator.escape(name);
+    const userToEdit = await User.findByPk(id);
     if (!userToEdit) {
       return res.status(404).json({ error: "User not found" });
     }
-    userToEdit.name = name
+    userToEdit.name = cleanName
     userToEdit.email = email 
     await userToEdit.save();
     res.status(200).json(userToEdit);
