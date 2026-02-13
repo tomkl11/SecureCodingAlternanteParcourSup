@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EditProfileUser from "./EditProfileUser";
 const UserDashboard = ({ user, handleUserRefresh }) => {
-  const onUpdateSuccess = "";
   const [isEditing, setIsEditing] = useState(false);
   const [schools, setSchools] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

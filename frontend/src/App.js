@@ -33,7 +33,7 @@ function App() {
         </div>
       </header>
       {user.role === 'ADMIN' ? (
-        <AdminDashboard user={user} />
+        <AdminDashboard user={user} handleUserRefresh={handleUserRefresh} />
       ) : (
         <UserDashboard user={user} handleUserRefresh={handleUserRefresh} />
       )}

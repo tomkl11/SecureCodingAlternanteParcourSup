@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Application = require('../models/Application');
+const validator = require('validator');
 router.get('/users', async (req, res) => {
   try {
     // Dans une version sécurisée, on vérifierait ici si l'user est vraiment Admin
@@ -35,6 +36,7 @@ router.post('/users/create', async (req, res) => {
   try { 
     const { name, email, password, role } = req.body; 
     const newUser = await User.create({ name, email, password, role }); 
+    await newUser.save();
     res.status(201).json(newUser); 
   } catch (err) { 
     res.status(500).json({ error: "Could not create user" }); 
@@ -43,13 +45,14 @@ router.post('/users/create', async (req, res) => {
 
 router.post('/users/:id/edit', async (req, res) => {
   try {
-      const { id } = req.params;
-      const { name, email} = req.body;
-      const userToEdit = await User.findByPk(id);
+    const { id } = req.params;
+    const { name, email} = req.body;
+    const cleanName = validator.escape(name);
+    const userToEdit = await User.findByPk(id);
     if (!userToEdit) {
       return res.status(404).json({ error: "User not found" });
     }
-    userToEdit.name = name
+    userToEdit.name = cleanName
     userToEdit.email = email 
     await userToEdit.save();
     res.status(200).json(userToEdit);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-
-const AdminDashboard = ({ user }) => {
+import EditProfileUser from "./EditProfileUser";
+const AdminDashboard = ({ user, handleUserRefresh }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   const [newUser, setNewUser] = useState({name: "", 
     email: "", 
@@ -26,6 +27,17 @@ const AdminDashboard = ({ user }) => {
         .catch((err) => console.error("Error fetching users:", err));
     }
   }, [user]);
+
+  if (isEditing) {
+    return (
+      <div style={{ padding: "20px" }}> 
+        <button onClick={() => setIsEditing(false)} style={{ marginBottom: "20px" }}>
+          ← Back to Dashboard
+        </button>
+        <EditProfileUser user={user} onUpdateSuccess={handleUserRefresh} />
+      </div>
+    );
+  }
 
   // Feature: Search keyword search [cite: 58]
   const filteredUsers = allUsers.filter(
@@ -105,6 +117,19 @@ const AdminDashboard = ({ user }) => {
         }}
       >
         <h2>Admin Dashboard</h2>
+        <button 
+            onClick={() => setIsEditing(true)}
+            style={{
+              padding: "8px 15px",
+              backgroundColor: "#003366",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              borderRadius: "4px",
+            }}
+          >
+            Edit My Profile
+          </button>
         <h3>User Management</h3>
         <div style={{ marginBottom: "20px" }}>
           <input
@@ -147,7 +172,9 @@ const AdminDashboard = ({ user }) => {
           <tbody>
             {filteredUsers.map((u) => (
               <tr key={u.id}>
-                <td dangerouslySetInnerHTML={{ __html: u.name }}></td>
+                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  {u.name}
+                </td>
                 <td style={{ padding: "10px", border: "1px solid #ddd" }}>
                   {u.email}
                 </td>
