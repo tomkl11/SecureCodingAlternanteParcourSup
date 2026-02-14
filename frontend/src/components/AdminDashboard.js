@@ -94,6 +94,26 @@ const AdminDashboard = ({ user, handleUserRefresh }) => {
     })
     .catch((err) => console.error("Error:", err));
   };
+
+  const handleSwitchUserRole = (userId) => {
+    if (window.confirm("Are you sure you want to switch this user's role?")) {
+      const userToSwitch = allUsers.find((u) => u.id === userId);
+    if (!userToSwitch) return;
+    fetch(`http://localhost:3000/api/users/${userId}/switchRole`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+    .then((data) => {
+      setAllUsers(prevUsers => prevUsers.map((u) => (u.id === userId ? data : u)));
+      alert(`User ${data.email} is now ${data.role}`);
+    })
+    .catch((err) => console.error("Error:", err));
+    }
+  };
   const handleDeleteSchool = (schoolId) => {
     if (window.confirm("Are you sure you want to delete this school?")) {
       fetch(`http://localhost:3000/api/schools/${schoolId}`, {
@@ -206,6 +226,23 @@ const AdminDashboard = ({ user, handleUserRefresh }) => {
                   {u.role}
                 </td>
                 <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  {u.id === user.id ? (
+                    <span style={{ color: "#999" }}>Current User </span>
+                  ) : (
+                    <button
+                      onClick={() => handleSwitchUserRole(u.id)}
+                      style={{
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        padding: "5px 10px",
+                        cursor: "pointer",
+                        borderRadius: "4px",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Switch Role
+                    </button>)}
                   {u.role !== "ADMIN" ? (
                     <button
                       onClick={() => handleDeleteUser(u.id)}

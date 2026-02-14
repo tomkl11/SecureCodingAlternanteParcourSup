@@ -4,16 +4,14 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { QueryTypes } = require('sequelize');
 router.post('/register', async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, role } = req.body;
 
   try {
-    // 1. Création de l'utilisateur dans la BDD
-    // VULNÉRABILITÉ : Mot de passe stocké en clair (pour ton projet)
     const newUser = await User.create({
       email,
       password,
       name,
-      role: 'USER'
+      role: role || 'USER'
     });
 
     console.log(`[AUTH] New user registered: ${email}`);
@@ -65,7 +63,7 @@ router.post('/login', async (req, res) => {
       res.status(401).json({ error: "Invalid credentials" });
     }
   } catch (err) {
-    console.error("❌ SQL Error:", err.message);
+    console.error("SQL Error:", err.message);
     res.status(500).json({ error: "Server error", details: err.message });
   }
 });

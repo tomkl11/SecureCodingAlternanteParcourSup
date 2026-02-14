@@ -62,4 +62,22 @@ router.post('/users/:id/edit',authenticate, async (req, res) => {
   }
   
 });
+
+router.post('/users/:id/switchRole', authorizeAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToEdit = await User.findByPk(id);
+    if (!userToEdit) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const oldRole = userToEdit.role;
+    userToEdit.role = oldRole === 'ADMIN' ? 'USER' : 'ADMIN';
+    await userToEdit.save();
+
+    console.log(`[AUTH] Role switched for ${userToEdit.name}: ${oldRole} -> ${userToEdit.role}`);
+    res.status(200).json(userToEdit);
+  } catch (err) {
+    res.status(500).json({ error: "Could not switch user role" });
+  }
+});
 module.exports = router;
